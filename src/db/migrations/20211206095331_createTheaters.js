@@ -5,7 +5,9 @@ exports.up = function(knex) {
         table.string("name");
         table.string("address_line_1");
         table.string("address_line_2");
-        table.city("city");
+        table.string("city");
+        table.string("state");
+        table.string("zip");
         table.string("image_url");
         table.timestamps(true, true);
       });

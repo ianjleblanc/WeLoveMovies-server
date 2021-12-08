@@ -22,10 +22,13 @@ async function update(req, res, next) {
     review_id: review.review_id,
   };
   // update review
+  
   let data = await reviewsService.update(updatedReview);
   // put response in correct format
+  // console.log(data)
   data = await reviewsService.readReviewCritic(review.review_id);
-  res.json({ data: data[0] });
+  // console.log(data)
+  res.json({ data });
 }
 
 // DELETE
@@ -51,46 +54,13 @@ async function reviewExists(req, res, next) {
   }
 }
 
-function hasValidReviewScore(req, res, next) {
-  const {
-    data: { score },
-  } = req.body;
 
-  if (score < 1 || score > 5) {
-    return next({
-      status: 400,
-      message: "Score must have a value between 1 and 5",
-    });
-  } else {
-    next();
-  }
-}
-
-function hasValidCriticAndMovieId(req, res, next) {
-  const {
-    data: { critic_id, movie_id },
-  } = req.body;
-
-  const oldCriticId = res.locals.review.critic_id
-  const oldMovieId = res.locals.review.movie_id
-
-  if (critic_id !== oldCriticId || movie_id !== oldMovieId) {
-    return next({
-      status: 400,
-      message: "Critic and Movie ID's can't be changed",
-    });
-  } else {
-    next();
-  }
-}
 
 module.exports = {
   list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(reviewExists), asyncErrorBoundary(read)],
   update: [
     asyncErrorBoundary(reviewExists),
-    hasValidReviewScore,
-    hasValidCriticAndMovieId,
     asyncErrorBoundary(update),
   ],
   delete: [asyncErrorBoundary(reviewExists), asyncErrorBoundary(destroy)],

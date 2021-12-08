@@ -17,7 +17,7 @@ function list() {
     .join("movies_theaters as mt", "mt.theater_id", "t.theater_id")
     .join("movies as m", "mt.movie_id", "m.movie_id")
     .select("*")
-    .then(reduceTheaterAndMovies)
+    .then(reduceTheatersAndMovies)
 }
 
 module.exports = {
